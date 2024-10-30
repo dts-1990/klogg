@@ -71,8 +71,10 @@ class TabbedCrawlerWidget : public QTabWidget {
 
     void removeCrawler( int index );
 
-  protected:
+  public:
     void keyPressEvent( QKeyEvent* event ) override;
+
+  protected:
     void mouseReleaseEvent( QMouseEvent* event ) override;
     void changeEvent( QEvent* event ) override;
 

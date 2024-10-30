@@ -1081,6 +1081,7 @@ void CrawlerWidget::setup()
     searchLineEdit_->setSizeAdjustPolicy( QComboBox::AdjustToMinimumContentsLengthWithIcon );
     searchLineEdit_->lineEdit()->setMaxLength( std::numeric_limits<int>::max() / 1024 );
     searchLineEdit_->setContentsMargins( 2, 2, 2, 2 );
+    searchLineEdit_->installEventFilter(this);
 
     QAction* clearSearchHistoryAction = new QAction( tr( "Clear search history" ), this );
     QAction* editSearchHistoryAction = new QAction( tr( "Edit search history" ), this );
@@ -1905,3 +1906,58 @@ QString CrawlerWidgetContext::toString() const
 
     return QJsonDocument::fromVariant( properies ).toJson( QJsonDocument::Compact );
 }
+
+bool CrawlerWidget::eventFilter(QObject *object, QEvent *event)
+{
+    Q_UNUSED(object);
+    Q_UNUSED(event);
+
+    LOG_ERROR << "CrawlerWidget::eventFilter";
+
+    switch (event->type()) {
+    case QEvent::KeyPress: {
+        auto keyEvent = static_cast<QKeyEvent*>(event);
+        auto mod = keyEvent->modifiers();
+        const Qt::Key key = (Qt::Key) keyEvent->key();
+        LOG_ERROR << "CrawlerWidget::eventFilter mod=" << mod << " key=" << key;
+
+        // Alt + numbers
+        if ( mod == Qt::AltModifier && ( key >= Qt::Key_1 && key <= Qt::Key_8 ) ) {
+            keyPressEvent(keyEvent);
+            return true;
+        }
+
+        // Alt + numbers
+        if ( mod == Qt::ControlModifier && key == Qt::Key_X) {
+            keyPressEvent(keyEvent);
+            return true;
+        }
+
+        break;
+    }
+    default:
+        // Remove warning
+        break;
+    }
+
+    return false;
+}
+
+void CrawlerWidget::keyPressEvent( QKeyEvent* event )
+{
+    const auto mod = event->modifiers();
+    const Qt::Key key = (Qt::Key) event->key();
+
+    LOG_ERROR << "CrawlerWidget::keyPressEvent mod=" << mod << " key=" << key;
+
+    // Ctrl + 9
+    if ( mod == Qt::AltModifier && ( key >= Qt::Key_1 && key <= Qt::Key_8 ) ) {
+        QSplitter::keyPressEvent( event );
+    }
+
+    // Ctrl + X
+    if ( mod == Qt::ControlModifier && key == Qt::Key_X) {
+        QSplitter::keyPressEvent( event );
+    }
+}
+

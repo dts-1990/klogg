@@ -224,6 +224,7 @@ class MainWindow : public QMainWindow {
     void removeFromRecent( const QString& pathToRemove );
     void tryOpenClipboard( int tryTimes );
     void updateShortcuts();
+    void keyPressEvent( QKeyEvent* event ) override;
 
     WindowSession session_;
     QString loadingFileName;

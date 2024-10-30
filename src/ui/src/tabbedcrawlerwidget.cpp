@@ -277,9 +277,9 @@ void TabbedCrawlerWidget::showContextMenu( int tab, QPoint globalPoint )
 void TabbedCrawlerWidget::keyPressEvent( QKeyEvent* event )
 {
     const auto mod = event->modifiers();
-    const auto key = event->key();
+    const Qt::Key key = (Qt::Key) event->key();
 
-    LOG_DEBUG << "TabbedCrawlerWidget::keyPressEvent";
+    LOG_ERROR << "TabbedCrawlerWidget::keyPressEvent mod=" << mod << " key=" << key;
 
     // Ctrl + tab
     if ( ( mod == Qt::ControlModifier && key == Qt::Key_Tab )
@@ -296,13 +296,13 @@ void TabbedCrawlerWidget::keyPressEvent( QKeyEvent* event )
         setCurrentIndex( ( currentIndex() - 1 >= 0 ) ? currentIndex() - 1 : count() - 1 );
     }
     // Ctrl + numbers
-    else if ( mod == Qt::ControlModifier && ( key >= Qt::Key_1 && key <= Qt::Key_8 ) ) {
+    else if ( mod == Qt::AltModifier && ( key >= Qt::Key_1 && key <= Qt::Key_8 ) ) {
         int newIndex = key - Qt::Key_0;
         if ( newIndex <= count() )
             setCurrentIndex( newIndex - 1 );
     }
     // Ctrl + 9
-    else if ( mod == Qt::ControlModifier && key == Qt::Key_9 ) {
+    else if ( mod == Qt::AltModifier && key == Qt::Key_9 ) {
         setCurrentIndex( count() - 1 );
     }
     else if ( mod == Qt::ControlModifier && ( key == Qt::Key_Q || key == Qt::Key_W ) ) {

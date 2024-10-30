@@ -2270,3 +2270,22 @@ void MainWindow::generateDump()
         throw std::logic_error( "test dump" );
     }
 }
+
+
+void MainWindow::keyPressEvent( QKeyEvent* event )
+{
+    const auto mod = event->modifiers();
+    const Qt::Key key = (Qt::Key) event->key();
+
+    LOG_ERROR << "MainWindow::keyPressEvent mod=" << mod << " key=" << key;
+
+    // Ctrl + 9
+    if ( mod == Qt::AltModifier && ( key >= Qt::Key_1 && key <= Qt::Key_8 ) ) {
+        mainTabWidget_.keyPressEvent( event );
+    }
+
+    // Ctrl + X
+    if ( mod == Qt::ControlModifier && key == Qt::Key_X) {
+        clearLogAction->trigger();
+    }
+}

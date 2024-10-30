@@ -112,6 +112,8 @@ class CrawlerWidget : public QSplitter,
 
     void registerShortcuts();
 
+    bool eventFilter(QObject *object, QEvent *event) override;
+
   public Q_SLOTS:
     // Stop the asynchoronous loading of the file if one is in progress
     // The file is identified by the view attached to it.
@@ -149,6 +151,7 @@ class CrawlerWidget : public QSplitter,
     void doSendAllStateSignals() override;
 
     void changeEvent( QEvent* event ) override;
+    void keyPressEvent( QKeyEvent* event ) override;
 
   Q_SIGNALS:
     // Sent to signal the client load has progressed,
